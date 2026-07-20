@@ -159,6 +159,7 @@ def agregar_juego(codigo, titulo, plataforma, genero, clasificacion, multiplayer
 
 def eliminar_juego(codigo):
     codigo_valido = buscar_codigo(codigo)
-    print(codigo_valido)
+    del(inventario[codigo_valido])
+    del(juegos[codigo_valido])
     
 
