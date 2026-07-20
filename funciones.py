@@ -1,4 +1,28 @@
-from main import juegos, inventario
+juegos = {
+    'g001': ['Eclipse Runner', 'pc', 'accion', 'T', True,
+    'NovaStudio'],
+    'g002': ['Puzzle Atlas', 'switch', 'puzzle', 'E', False,
+    'BrightWorks'],
+    'g003': ['Sky Legends', 'ps5', 'aventura', 'T', True,
+    'OrionGames'],
+    'g004': ['Racing Pulse', 'pc', 'carreras', 'E', True,
+    'VelocityLab'],
+    'g005': ['Mystic Farm', 'switch', 'simulacion', 'E', False,
+    'GreenSeed'],
+    'g006': ['Shadow Tactics', 'xbox', 'estrategia', 'M', False,
+    'IronGate'],
+}
+
+inventario = {
+    'g001': [9990, 7],
+    'g002': [19990, 0],
+    'g003': [42990, 3],
+    'g004': [14990, 5],
+    'g005': [17990, 9],
+    'g006': [39990, 2],
+}
+
+
 
 def validar_codigo():
     codigo = input("Ingrese codigo: ").strip().lower()
@@ -6,17 +30,20 @@ def validar_codigo():
     if codigo == "":
         print("El codigo no puede estar vacío")
         return False, None
-
-    if codigo in juegos or codigo in inventario:
-        print("El código ya existe en los invenatarios")
-        return False, None
     
-    else:
-        return True, codigo
+    return codigo, True
     
+    
+def leer_opcion():
+    try:
+        opc = int(input("Ingrese opcion: "))
+        if 1 <= opc <= 6:
+            return opc
+    except ValueError:
+        print("Tipo de dato invalido")
 
 def validar_vacio_espacios(texto):
-    text = input(f"Ingrese {texto} del juego:").strip().lower()
+    text = input(f"Ingrese {texto} del juego: ").strip().lower()
 
     if text == "":
         print(f"El {texto} no puede estar vacio")
@@ -26,7 +53,7 @@ def validar_vacio_espacios(texto):
 
 def validar_clasificacion():
     opc = ["e", "t", "m"]
-    clasificacion = input("Ingrese clasificacion: E - T- M").lower().strip()
+    clasificacion = input("Ingrese clasificacion E - T- M: ").lower().strip()
 
     if clasificacion == "":
         print("La clasificacion no puede estar vacía")
@@ -36,7 +63,7 @@ def validar_clasificacion():
         return True, clasificacion
     
 def validar_multiplayer():
-    multi = input("El juego es multiplayer? s/n:").strip().lower()
+    multi = input("El juego es multiplayer? s/n: ").strip().lower()
 
     if multi == "s":
         multi = True
@@ -71,49 +98,44 @@ def validar_stock():
 
 def stock_plataforma(plataforma):
     total_stock = 0
-
     for codigo, datos_juego in juegos.items():
         plataforma_juego = datos_juego[1]
-
-        if plataforma_juego == plataforma:
-            stock_plataforma = inventario[codigo][1]
-            total_stock += stock_plataforma
-
-        print(f"El total de stock para la plataforma {plataforma} es: {total_stock}")
-        return total_stock
+        
+        if plataforma == plataforma_juego:
+            stock_disponible = inventario[codigo][1]
+            total_stock += stock_disponible
+    
+    print(f"El stock de la plataforma {plataforma} es: {total_stock}")
+    return total_stock
     
 def rango_precio(p_min, p_max):
-    lista_precios = []
+    
 
     if p_min >= 0 and p_max >= 0:
-        for codigo , dato in inventario.items():
+        for codigo , dato in juegos.items():
             nombre_juego = dato[0]
             stock_valido = inventario[codigo][1]
-            codigo_inventario = inventario[codigo]
 
             if stock_valido != 0 and p_min <= p_max:
-                lista_precios.append(codigo_inventario, nombre_juego)
-
-            else:
-                print("No hay juegos en ese rango de precio o el juego no esta disponible")
-        
-        for juego in lista_precios:
-            print(f"{juego[1]}--{juego[0]}")
-
+                codigo_inventario = inventario[codigo]
+                lista_precios = []
+                lista_precios.append([codigo_inventario, nombre_juego])
+                for juego in lista_precios:
+                    print(f"{juego[1]}--{codigo}")
+                    lista_precios = []
 
 def buscar_codigo(codigo):
-    codigo = codigo.lower()
     for code in inventario:
-        if code == codigo:
-            return True
+        if codigo in inventario == code:
+            return False
         else:
-            return False, None
-    
+            return True
+        
 def actualizar_precio(codigo, nuevo_precio):
     codigo_valido = buscar_codigo(codigo)
 
     if codigo_valido:
-        for code, precio in inventario.items():
+        for code in inventario.items():
             inventario[code][0] = nuevo_precio
             return True
     else:
@@ -122,25 +144,21 @@ def actualizar_precio(codigo, nuevo_precio):
 
 def agregar_juego(codigo, titulo, plataforma, genero, clasificacion, multiplayer, editor, precio, stock):
 
-    if codigo in inventario or codigo in juegos:
-        return False, f"El {codigo} ya esta registrado"
+    if codigo == "":
+        return False, None
     
-    else:
-        juegos[codigo] = [titulo, plataforma, genero, clasificacion, multiplayer, editor]
+    if codigo in inventario or codigo in juegos:
+        print("El codigo ya existe")
+        return False, None
+    
+    juegos[codigo] = [titulo, plataforma, genero, clasificacion, multiplayer, editor]
 
-        inventario[codigo] = [precio, stock]
+    inventario[codigo] = [precio, stock]
 
-        return True
+    return True
 
 def eliminar_juego(codigo):
     codigo_valido = buscar_codigo(codigo)
-
-    if codigo_valido:
-        juegos.remove(codigo_valido)
-        inventario.remove(codigo_valido)
-        return True
-
-    else:
-        return False
+    print(codigo_valido)
     
 

@@ -1,29 +1,5 @@
 from funciones import *
 
-juegos = {
-    'g001': ['Eclipse Runner', 'PC', 'accion', 'T', True,
-    'NovaStudio'],
-    'g002': ['Puzzle Atlas', 'Switch', 'puzzle', 'E', False,
-    'BrightWorks'],
-    'g003': ['Sky Legends', 'PS5', 'aventura', 'T', True,
-    'OrionGames'],
-    'g004': ['Racing Pulse', 'PC', 'carreras', 'E', True,
-    'VelocityLab'],
-    'g005': ['Mystic Farm', 'Switch', 'simulacion', 'E', False,
-    'GreenSeed'],
-    'g006': ['Shadow Tactics', 'Xbox', 'estrategia', 'M', False,
-    'IronGate'],
-}
-
-inventario = {
-    'g001': [9990, 7],
-    'g002': [19990, 0],
-    'g003': [42990, 3],
-    'g004': [14990, 5],
-    'g005': [17990, 9],
-    'g006': [39990, 2],
-}
-
 
 while True:
     print("1. Stock por plataforma")
@@ -33,12 +9,11 @@ while True:
     print("5. Eliminar juego")
     print("6. Salir")
 
-    opc = int(input("Ingrese opcion: "))
-    if 1 <= opc <= 6:
-        match opc:
+    opc = leer_opcion()
+    match opc:
             case 1:
 
-                platform = validar_vacio_espacios("plataforma") 
+                platform = input("Ingrese plataforma: ").lower().strip()
                 stock_plataforma(platform)
 
             case 2:
@@ -75,12 +50,12 @@ while True:
                 precio = validar_precio()
                 stock = validar_stock()
 
-                if (codigo, titulo, plataforma, genero, clasificacion, multiplayer, editor, precio, stock) == True:
-                    agregar_juego(codigo, titulo, plataforma, genero, clasificacion, multiplayer, editor, precio, stock)
-
-                else:
+                if (codigo, titulo, plataforma, genero, clasificacion, multiplayer, editor, precio, stock):
+                    agregar_juego(codigo, titulo, plataforma, genero, clasificacion, multiplayer, editor, precio, stock != True)
                     print("El código ya existe")
-            
+                else:
+                    print("Juego agregado con exito")
+                    
             case 5:
                 codigo = validar_codigo()
                 eliminar_juego(codigo)
